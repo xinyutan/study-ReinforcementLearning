@@ -1,0 +1,62 @@
+\documentclass[12pt]{amsart}
+\usepackage{geometry} % see geometry.pdf on how to lay out the page. There's lots.
+\usepackage{amsmath}
+ \usepackage{amssymb}
+\geometry{a4paper} % or letter or a5paper or ... etc
+% \geometry{landscape} % rotated page geometry
+
+\title{Chapter 3: Finite Markov Decision Process}
+
+%%% BEGIN DOCUMENT
+\begin{document}
+\maketitle
+
+\subsection*{Exercise 3.11}
+
+\begin{align*}
+	\mathbb{E}(R_{t+1}|S_t) &= \sum_{r_{t+1}} r_{t+1}p(r_{t+1}|S_t) \\
+	&= \sum_{r_{t+1}} r_{t+1} \sum_{S_{t+1}} \sum _{A_t} p(r_{t+1}, S_{t+1}, A_t | S_t) \\
+	&= \sum_{r_{t+1}} \sum_{s'} \sum _{a} r_{t+1} p(r_{t+1}, S_{t+1} = s'|S_t=s, A_t=a) \pi(a|s)
+\end{align*}
+
+\subsection*{Exercise 3.12}
+
+\begin{align*}
+\nu_{\pi}(s) &= \mathbb{E}(G_t|S_t=s) \\
+&= \sum_{g_t} g_t p(g_t|S_t=s) \\
+&= \sum_{g_t} g_t \sum_a p(g_t, A_t=a | S_t =s) \\
+&= \sum_{g_t} g_t \sum_a p(g_t, | S_t =s, A_t=a) p(A_t =a | S_t= s) \\
+&= \sum_a \left ( \sum_{g_t} g_t p(g_t, | S_t =s, A_t=a) \right) \pi(a|s) \\
+&= \sum_a q_{\pi}(s,a) \pi(a|s)
+\end{align*}
+
+\subsection*{Exercise 3.13}
+
+Give an equation for $q_{\pi}$ in terms of $v_{\pi}$ and the four-argument $p$.
+
+\begin{align*}
+q_{\pi}(s,a) &= \mathbb{E}(G_t|S_t=s, A_t=a) \\
+	&= \mathbb{E}(R_t + \gamma G_{t+1} | S_t = s, A_t = a) \\
+	&= \mathbb{E}(R_t|s, a) + \gamma \mathbb{E}(G_{t+1}|s, a) \\
+	&= \sum_r r p(r|s,a) + \gamma \sum_{g_{t+1}} g_{t+1} p(g_{t+1}|s,a) \\
+	&= \sum_r \sum_{s'} r p(r, s'|s, a) + \gamma \sum_{g_{t+1}} \sum_{s'} g_{t+1} p(g_{t+1}, s' | s, a) \\
+	&= \sum_r \sum_{s'} r p(r, s'|s, a) + \gamma \sum_{g_{t+1}} \sum_{s'} g_{t+1} p(g_{t+1}|s', s, a) p(s'|s, a) \\
+	&= \sum_r \sum_{s'} r p(r, s'|s, a) + \gamma \sum_{g_{t+1}} \sum_{s'} g_{t+1} p(g_{t+1}|s') \sum_{r} p(r, s'|s, a) \\
+	&= \sum_r \sum_{s'} \left( r  + \gamma \nu_{\pi}(s') \right) p(r, s' | s, a)
+\end{align*}
+
+\subsection*{Exercise 3.17} 
+
+Bellman equation for action values.
+
+\begin{align*}
+q_{\pi}(s,a) &= \mathbb{E}(G_t|S_t=s, A_t=a) \\
+	&= \mathbb{E}(r + \gamma G_{t+1} | s, a) \\
+	& = \sum_{s'} \sum_r p(r, s' | s,a) \left( r + \gamma \mathbb{E}(G_{t+1}|r, s', s, a) \right)  \\ 
+	& = \sum_{s'} \sum_r p(r, s' | s,a) \left( r + \gamma \mathbb{E}(G_{t+1}|s') \right)  \\ 
+	& = \sum_{s'} \sum_r p(r, s' | s,a) \left( r + \gamma \sum_{a'} p(a'|s') \mathbb{E}(G_{t+1}|s', a') \right)  \\ 
+	&= \sum_{s'}  \sum_r p(r, s' | s,a) \left(r + \gamma \sum_{a'} \pi(a'|s') q_{\pi}(s', a') \right)
+\end{align*}
+
+
+\end{document}
